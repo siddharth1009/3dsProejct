@@ -1,0 +1,77 @@
+use mysql;
+drop table Customer;
+drop table InsuranceType;
+drop table Vehicle;
+drop table bill;
+drop table fir;
+show tables;
+
+
+
+create table Vehicle(
+rcNumber int primary key,
+chasisNumber int,
+dateOfPurchase date,
+manufacturer varchar(100),
+engineNumber varchar(50),
+vehicleModel varchar(60),
+cost double
+);
+
+create table InsuranceType(
+insuranceTypeId int primary key,
+insuranceName varchar(100),
+insuranceDescription varchar(100),
+insuranceCost double
+);
+
+create table InsuranceIssued(
+policyId int primary key,
+startDate date,
+expiryDate date,
+insuranceTypeId int,
+FOREIGN KEY (insuranceTypeId) REFERENCES InsuranceType(insuranceTypeId)
+);
+
+create table Customer(
+customerId int not null auto_increment,
+customerName varchar(100),
+dob date,
+address varchar(100),
+rcNumber int,
+policyId int,
+primary key( customerId),
+FOREIGN KEY (rcNumber) REFERENCES Vehicle(rcNumber),
+foreign key(policyId) references InsuranceIssued(policyId)
+);
+
+create table InsuranceHistory(
+policyId int primary key,
+startDate date,
+expiryDate date,
+customerId int,
+foreign key (customerId) references Customer(customerId)
+);
+
+create table Bill(
+billId int primary key,
+billAmount double
+);
+
+create table Fir(
+firId int primary key,
+caseDescription varchar(100),
+filedDate Date
+);
+
+create table ClaimRequest(
+tokenId int not null auto_increment,
+policyId int,
+firId int,
+billId int,
+cause varchar(100),
+status_ varchar(20),
+reason varchar(100),
+primary key(tokenId),
+foreign key(policyId) references insuranceIssued(policyId)
+);
